@@ -1,0 +1,78 @@
+   [ApiController]
+[Route("api/projetos")]
+public class ProjetoController : ControllerBase
+{
+    private readonly IProjetoRepository _repo;
+
+    public ProjetoController(IProjetoRepository repo)
+    {
+        _repo = repo;
+    }
+
+    [HttpPost]
+    public IActionResult CriarProjeto(Projeto projeto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        if (!_repo.AdicionarProjeto(projeto))
+            return BadRequest("Já existe um projeto com esse número.");
+
+        return Ok(projeto);
+    }
+
+    [HttpGet]
+    public IActionResult ListarProjetos() => Ok(_repo.ObterTodos());
+}
+
+[ApiController]
+[Route("api/visitas")]
+public class VisitaController : ControllerBase
+{
+    private readonly IVisitaRepository _repository;
+
+    public VisitaController(IVisitaRepository repository)
+    {
+        _repository = repo;
+    }
+
+    [HttpPost]
+    public IActionResult RegistrarVisita([FromBody] Visita visita)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        _repository.RegistrarVisita(visita);
+        return Ok(visita);
+    }
+
+    [HttpGet("{numeroProjeto}")]
+    public IActionResult ObterVisitas(int numeroProjeto) =>
+        Ok(_repository.ObterPorProjeto(numeroProjeto));
+}
+[ApiController]
+[Route("api/projetos")]
+public class ProjetoController : ControllerBase
+{
+    private readonly IProjetoRepository _repo;
+
+    public ProjetoController(IProjetoRepository repo)
+    {
+        _repo = repo;
+    }
+
+    [HttpPost]
+    public IActionResult CriarProjeto([FromBody] Projeto projeto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        if (!_repo.AdicionarProjeto(projeto))
+            return Conflict("Já existe um projeto com esse número.");
+
+        return Ok(projeto);
+    }
+
+    [HttpGet]
+    public IActionResult ListarProjetos() => Ok(_repo.ObterTodos());
+}
