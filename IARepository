@@ -1,0 +1,34 @@
+public class ProjetoRepository : IProjetoRepository
+{
+    private List<Projeto> _projetos = new();
+
+    public bool AdicionarProjeto(Projeto projeto)
+    {
+        if (_projetos.Any(p => p.NumeroProjeto == projeto.NumeroProjeto))
+            return false;
+
+        _projetos.Add(projeto);
+        return true;
+    }
+
+    public List<Projeto> ObterTodos() => _projetos;
+
+    public Projeto ObterPorNumero(int numeroProjeto) =>
+        _projetos.FirstOrDefault(p => p.NumeroProjeto == numeroProjeto);
+}
+
+public interface IVisitaRepository
+{
+    void RegistrarVisita(Visita visita);
+    List<Visita> ObterPorProjeto(int numeroProjeto);
+}
+
+public class VisitaRepository : IVisitaRepository
+{
+    private  List<Visita> _visitas = new();
+
+    public void RegistrarVisita(Visita visita) => _visitas.Add(visita);
+
+    public List<Visita> ObterPorProjeto(int numeroProjeto) =>
+        _visitas.Where(v => v.NumeroProjeto == numeroProjeto).ToList();
+}
