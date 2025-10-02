@@ -1,0 +1,6 @@
+public interface IProjetoRepository
+{
+    bool AdicionarProjeto(Projeto projeto);
+    List<Projeto> ObterTodos();
+    Projeto ObterPorNumero(int numeroProjeto);
+}
